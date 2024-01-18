@@ -29,19 +29,30 @@ public:
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	void LookUp(float AxisValue);
+	void LookUpRate(float AxisValue);
+	void LookRight(float AxisValue);
+	void LookRightRate(float AxisValue);
+
+	UPROPERTY(EditAnywhere)
+	float RotationRate = 70.f;
 
 	// For Enhanced Input
 	class UInputMappingContext* InputMappingContext;
 	class UInputAction* MoveForwardAction;
 	class UInputAction* MoveRightAction;
 	class UInputAction* LookUpAction;
+	class UInputAction* LookUpRateAction;
 	class UInputAction* LookRightAction;
+	class UInputAction* LookRightRateAction;
 	class UInputAction* JumpAction;
 
 	void MoveForward_Enhanced(const struct FInputActionValue& Value);
 	void MoveRight_Enhanced(const struct FInputActionValue& Value);	
 	void LookUp_Enhanced(const struct FInputActionValue& Value);
+	void LookUpRate_Enhanced(const struct FInputActionValue& Value);
 	void LookRight_Enhanced(const struct FInputActionValue& Value);
+	void LookRightRate_Enhanced(const struct FInputActionValue& Value);
 	void Jump_Enhanced(const struct FInputActionValue& Value);
 
 

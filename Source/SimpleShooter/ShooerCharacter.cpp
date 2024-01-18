@@ -30,9 +30,17 @@ AShooerCharacter::AShooerCharacter()
 	if(INPUT_ACTION_LOOK_UP.Succeeded())
 		LookUpAction = INPUT_ACTION_LOOK_UP.Object;
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_LOOK_UP_RATE(TEXT("/Game/Input/IA_LookUpRate"));
+	if(INPUT_ACTION_LOOK_UP_RATE.Succeeded())
+		LookUpRateAction = INPUT_ACTION_LOOK_UP_RATE.Object;
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_LOOK_RIGHT(TEXT("/Game/Input/IA_LookRight"));
 	if(INPUT_ACTION_LOOK_RIGHT.Succeeded())
 		LookRightAction = INPUT_ACTION_LOOK_RIGHT.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_LOOK_RIGHT_RATE(TEXT("/Game/Input/IA_LookRightRate"));
+	if(INPUT_ACTION_LOOK_RIGHT_RATE.Succeeded())
+		LookRightRateAction = INPUT_ACTION_LOOK_RIGHT_RATE.Object;
 
 	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_JUMP(TEXT("/Game/Input/IA_Jump"));
 	if (INPUT_ACTION_JUMP.Succeeded())
@@ -72,14 +80,18 @@ void AShooerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//	EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AShooerCharacter::MoveForward_Enhanced);
 	//	EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AShooerCharacter::MoveRight_Enhanced);
 	//	EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookUp_Enhanced);
+	//	EnhancedInputComponent->BindAction(LookUpRateAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookUpRate_Enhanced);
 	//	EnhancedInputComponent->BindAction(LookRightAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookRight_Enhanced);
+	//	EnhancedInputComponent->BindAction(LookRightRateAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookRightRate_Enhanced);
 	//	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AShooerCharacter::Jump_Enhanced);
 	//}
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AShooerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AShooerCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AShooerCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AShooerCharacter::LookUpRate);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AShooerCharacter::LookRight);
+	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AShooerCharacter::LookRightRate);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 }
@@ -94,6 +106,27 @@ void AShooerCharacter::MoveRight(float AxisValue)
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
+void AShooerCharacter::LookUp(float AxisValue)
+{
+	APawn::AddControllerPitchInput(AxisValue);
+}
+
+void AShooerCharacter::LookUpRate(float AxisValue)
+{
+	LookUp(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AShooerCharacter::LookRight(float AxisValue)
+{
+	APawn::AddControllerYawInput(AxisValue);
+}
+
+void AShooerCharacter::LookRightRate(float AxisValue)
+{
+	LookRight(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+
 void AShooerCharacter::MoveForward_Enhanced(const FInputActionValue& Value)
 {
 	MoveForward(Value.Get<float>());
@@ -106,12 +139,22 @@ void AShooerCharacter::MoveRight_Enhanced(const FInputActionValue& Value)
 
 void AShooerCharacter::LookUp_Enhanced(const FInputActionValue& Value)
 {
-	APawn::AddControllerPitchInput(Value.Get<float>());
+	LookUp(Value.Get<float>());
+}
+
+void AShooerCharacter::LookUpRate_Enhanced(const FInputActionValue& Value)
+{
+	LookUpRate(Value.Get<float>());
 }
 
 void AShooerCharacter::LookRight_Enhanced(const FInputActionValue& Value)
 {
-	APawn::AddControllerYawInput(Value.Get<float>());
+	LookRight(Value.Get<float>());
+}
+
+void AShooerCharacter::LookRightRate_Enhanced(const FInputActionValue& Value)
+{
+	LookRightRate(Value.Get<float>());
 }
 
 void AShooerCharacter::Jump_Enhanced(const FInputActionValue& Value)
