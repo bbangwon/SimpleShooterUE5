@@ -29,4 +29,22 @@ public:
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	// For Enhanced Input
+	class UInputMappingContext* InputMappingContext;
+	class UInputAction* MoveForwardAction;
+	class UInputAction* MoveRightAction;
+	class UInputAction* LookUpAction;
+	class UInputAction* LookRightAction;
+	class UInputAction* JumpAction;
+
+	void MoveForward_Enhanced(const struct FInputActionValue& Value);
+	void MoveRight_Enhanced(const struct FInputActionValue& Value);	
+	void LookUp_Enhanced(const struct FInputActionValue& Value);
+	void LookRight_Enhanced(const struct FInputActionValue& Value);
+	void Jump_Enhanced(const struct FInputActionValue& Value);
+
+
+
+
 };
