@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ShooerCharacter.generated.h"
 
+class AGun;
+
 UCLASS()
 class SIMPLESHOOTER_API AShooerCharacter : public ACharacter
 {
@@ -55,7 +57,9 @@ private:
 	void LookRightRate_Enhanced(const struct FInputActionValue& Value);
 	void Jump_Enhanced(const struct FInputActionValue& Value);
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AGun> GunClass;
 
-
-
+	UPROPERTY()
+	AGun* Gun;
 };
