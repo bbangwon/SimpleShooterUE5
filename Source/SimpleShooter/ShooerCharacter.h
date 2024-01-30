@@ -36,6 +36,8 @@ private:
 	void LookRight(float AxisValue);
 	void LookRightRate(float AxisValue);
 
+	void Shoot();
+
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 70.f;
 
@@ -48,6 +50,7 @@ private:
 	class UInputAction* LookRightAction;
 	class UInputAction* LookRightRateAction;
 	class UInputAction* JumpAction;
+	class UInputAction* ShootAction;
 
 	void MoveForward_Enhanced(const struct FInputActionValue& Value);
 	void MoveRight_Enhanced(const struct FInputActionValue& Value);	
@@ -56,6 +59,7 @@ private:
 	void LookRight_Enhanced(const struct FInputActionValue& Value);
 	void LookRightRate_Enhanced(const struct FInputActionValue& Value);
 	void Jump_Enhanced(const struct FInputActionValue& Value);
+	void Shoot_Enhanced(const struct FInputActionValue& Value);
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AGun> GunClass;

@@ -46,6 +46,10 @@ AShooerCharacter::AShooerCharacter()
 	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_JUMP(TEXT("/Game/Input/IA_Jump"));
 	if (INPUT_ACTION_JUMP.Succeeded())
 		JumpAction = INPUT_ACTION_JUMP.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> INPUT_ACTION_SHOOT(TEXT("/Game/Input/IA_Shoot"));
+	if (INPUT_ACTION_SHOOT.Succeeded())
+		ShootAction = INPUT_ACTION_SHOOT.Object;
 }
 
 // Called when the game starts or when spawned
@@ -90,6 +94,7 @@ void AShooerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//	EnhancedInputComponent->BindAction(LookRightAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookRight_Enhanced);
 	//	EnhancedInputComponent->BindAction(LookRightRateAction, ETriggerEvent::Triggered, this, &AShooerCharacter::LookRightRate_Enhanced);
 	//	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AShooerCharacter::Jump_Enhanced);
+	//	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AShooerCharacter::Shoot_Enhanced);
 	//}
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AShooerCharacter::MoveForward);
@@ -100,6 +105,7 @@ void AShooerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AShooerCharacter::LookRightRate);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Pressed, this, &AShooerCharacter::Shoot);
 }
 
 void AShooerCharacter::MoveForward(float AxisValue)
@@ -132,6 +138,13 @@ void AShooerCharacter::LookRightRate(float AxisValue)
 	LookRight(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AShooerCharacter::Shoot()
+{
+	if (Gun)
+	{
+		Gun->PullTrigger();	
+	}
+}
 
 void AShooerCharacter::MoveForward_Enhanced(const FInputActionValue& Value)
 {
@@ -166,4 +179,9 @@ void AShooerCharacter::LookRightRate_Enhanced(const FInputActionValue& Value)
 void AShooerCharacter::Jump_Enhanced(const FInputActionValue& Value)
 {
 	Jump();
+}
+
+void AShooerCharacter::Shoot_Enhanced(const FInputActionValue& Value)
+{
+	Shoot();
 }
