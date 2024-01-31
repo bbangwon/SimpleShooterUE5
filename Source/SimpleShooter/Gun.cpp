@@ -4,6 +4,8 @@
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#include "SimpleShooter.h"
 
 // Sets default values
 AGun::AGun()
@@ -23,6 +25,18 @@ AGun::AGun()
 void AGun::PullTrigger()
 {
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if(OwnerPawn == nullptr) return;
+	AController* OwnerController = OwnerPawn->GetController();
+	if(OwnerController == nullptr) return;
+
+	FVector ViewPointLocation;
+	FRotator ViewPointRotation;
+
+	OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
+
+	DrawDebugCamera(GetWorld(), ViewPointLocation, ViewPointRotation, 90, 2, FColor::Red, true);	
 }
 
 // Called when the game starts or when spawned
