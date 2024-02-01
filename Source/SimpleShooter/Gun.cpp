@@ -36,7 +36,16 @@ void AGun::PullTrigger()
 
 	OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
 
-	DrawDebugCamera(GetWorld(), ViewPointLocation, ViewPointRotation, 90, 2, FColor::Red, true);	
+	//트레이싱 끝점
+	FVector End = ViewPointLocation + ViewPointRotation.Vector() * MaxRange;
+
+	//라인 트레이싱
+	struct FHitResult Hit;
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, ViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1);
+	if(bSuccess)
+	{
+		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
+	}
 }
 
 // Called when the game starts or when spawned
