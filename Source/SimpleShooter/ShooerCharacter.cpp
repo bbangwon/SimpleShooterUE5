@@ -57,6 +57,8 @@ void AShooerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Health = MaxHealth;
+
 	//Enhanced Input
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -184,4 +186,16 @@ void AShooerCharacter::Jump_Enhanced(const FInputActionValue& Value)
 void AShooerCharacter::Shoot_Enhanced(const FInputActionValue& Value)
 {
 	Shoot();
+}
+
+float AShooerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageApplied = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	DamageApplied = FMath::Min(Health, DamageApplied);
+	Health -= DamageApplied;
+
+	UE_LOG(LogTemp, Warning, TEXT("Health left %f"), Health);
+
+	return DamageApplied;
 }
