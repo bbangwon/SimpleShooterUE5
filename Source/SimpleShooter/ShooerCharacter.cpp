@@ -199,3 +199,8 @@ float AShooerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 	return DamageApplied;
 }
+
+bool AShooerCharacter::IsDead() const
+{
+	return Health <= 0.f;
+}
