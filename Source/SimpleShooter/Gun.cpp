@@ -42,7 +42,12 @@ void AGun::PullTrigger()
 
 	//라인 트레이싱
 	struct FHitResult Hit;
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, ViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1);
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, ViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 	if(bSuccess)
 	{
 		//뷰의 반대방향으로 ImpactEffect를 생성
