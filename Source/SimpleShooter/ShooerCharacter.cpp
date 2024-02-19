@@ -8,6 +8,7 @@
 #include "InputMappingContext.h"
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "SimpleShooterGameModeBase.h"
 
 // Sets default values
 AShooerCharacter::AShooerCharacter()
@@ -202,6 +203,11 @@ float AShooerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	{
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
 	}
 
 	return DamageApplied;
