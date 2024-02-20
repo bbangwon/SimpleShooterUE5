@@ -84,7 +84,7 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 AController* AGun::GetOwnerController() const
 {
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (OwnerPawn == nullptr) return;
+	if (OwnerPawn == nullptr) return nullptr;
 	return OwnerPawn->GetController();
 }
 
